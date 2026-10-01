@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    /* Prevent the whole page from rubber-banding sideways on Android while
+       still allowing normal vertical scroll / pull-to-refresh. */
+    overscroll-behavior-x: none;
+  }
+  body {
+    @apply bg-white text-slate-900 antialiased;
+  }
+  .dark body {
+    @apply bg-medical-900 text-slate-100;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-lg shadow-medical-900/5;
+  }
+  .dark .glass {
+    @apply bg-medical-800/50 border-white/10 shadow-black/30;
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-[44px] items-center justify-center rounded-xl bg-medical-500 px-5 py-2.5 text-sm font-semibold text-white
+      transition-colors hover:bg-medical-600 focus-visible:outline focus-visible:outline-2
+      focus-visible:outline-offset-2 focus-visible:outline-medical-500 disabled:opacity-50 select-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex min-h-[44px] items-center justify-center rounded-xl border border-medical-200 bg-white px-5 py-2.5 text-sm
+      font-semibold text-medical-700 transition-colors hover:bg-medical-50 focus-visible:outline
+      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-medical-500 select-none
+      dark:border-white/10 dark:bg-medical-800 dark:text-slate-200 dark:hover:bg-medical-700;
+  }
+
+  .input-field {
+    @apply w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400
+      focus:border-medical-500 focus:outline-none focus:ring-2 focus:ring-medical-500/20
+      dark:border-white/10 dark:bg-medical-800/60 dark:text-slate-100 dark:placeholder:text-slate-500;
+  }
+
+  /*
+   * Safe-area aware fixed chrome. Use alongside position:fixed/sticky
+   * elements that sit at a physical screen edge (bottom nav, fixed action
+   * bars, sticky headers) so Android's gesture bar / status bar never
+   * overlaps content. env() falls back to 0 on devices without a notch/bar,
+   * so this never adds unwanted empty space on desktop.
+   */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-x {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /*
+   * UI chrome (buttons, nav items, tabs, icons) shouldn't let a long-press
+   * select its label text. Real content must stay selectable — see
+   * .selectable-content below, and never apply .no-select to a container
+   * that wraps research text, textareas, or AI output.
+   */
+  .no-select {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .selectable-content {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  /* Internal scroll panels (sidebars, dropdowns, bottom sheets) that should
+     not propagate their scroll into the page behind them. */
+  .scroll-contain {
+    overscroll-behavior-y: contain;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
